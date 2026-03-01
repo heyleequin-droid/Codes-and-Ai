@@ -1,3 +1,6 @@
+---
+layout: default
+---
 # Module 2: Coding Basics
 
 Let's start coding! We'll use Python, a beginner-friendly language.

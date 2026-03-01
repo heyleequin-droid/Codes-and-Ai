@@ -1,3 +1,6 @@
+---
+layout: default
+---
 # Module 6: Real-World Prompt Examples
 
 Here are some prompts you can use right now:

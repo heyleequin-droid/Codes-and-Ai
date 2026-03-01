@@ -1,3 +1,6 @@
+---
+layout: default
+---
 # Module 5: Prompt Engineering Tips & Tricks
 
 Become a prompt pro! Here are some tips:

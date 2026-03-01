@@ -1,3 +1,6 @@
+---
+layout: default
+---
 # Module 1: Introduction
 
 Welcome! In this course, you'll learn the basics of coding and how to prompt AI to get the outcomes you desire.

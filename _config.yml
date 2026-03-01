@@ -1,3 +1,10 @@
 title: Codes & AI
 description: Coding for Beginners & AI Prompting - Become your own person. Be your own AI.
 theme: minima
+url: "https://heyleequin-droid.github.io"
+baseurl: "/Codes-and-Ai"
+plugins:
+  - jekyll-relative-links
+relative_links:
+  enabled: true
+  collections: true

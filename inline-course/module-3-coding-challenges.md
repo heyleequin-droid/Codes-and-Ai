@@ -1,3 +1,6 @@
+---
+layout: default
+---
 # Module 3: Interactive Coding Challenges
 
 Let's practice! Try these challenges in Python:

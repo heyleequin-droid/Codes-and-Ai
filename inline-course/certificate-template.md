@@ -1,3 +1,6 @@
+---
+layout: default
+---
 # Certificate of Completion
 
 **Congratulations!**

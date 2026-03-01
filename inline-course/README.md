@@ -1,3 +1,6 @@
+---
+layout: default
+---
 # Become Your Own Person. Be Your Own AI.
 
 Welcome to the Inline Course: Coding for Beginners & AI Prompting!

@@ -1,3 +1,6 @@
+---
+layout: default
+---
 # Module 7: Final Exam & Certificate
 
 ## Final Exam

@@ -1,3 +1,6 @@
+---
+layout: default
+---
 # List of Useful Prompts
 
 Use these prompts to get the most out of AI:

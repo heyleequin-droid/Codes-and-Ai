@@ -1,3 +1,6 @@
+---
+layout: default
+---
 # Fun & Interactive Elements
 
 - **Catchphrase:** Become your own person. Be your own AI.

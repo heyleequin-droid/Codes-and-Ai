@@ -1,3 +1,6 @@
+---
+layout: default
+---
 # Module 4: How to Prompt AI
 
 AI can help you code, write, and solve problems. The key is knowing how to ask!
