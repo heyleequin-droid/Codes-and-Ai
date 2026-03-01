@@ -183,73 +183,76 @@ function renderQuiz(moduleKey, containerId, onPass) {
     const letters = ['A', 'B', 'C', 'D'];
     answered = false;
 
-    container.innerHTML = `
-      <div class="quiz-container">
-        <div class="quiz-header">
-          <span class="quiz-label">Quiz</span>
-          <span class="quiz-progress-text">Question ${currentQ + 1} of ${data.questions.length}</span>
-        </div>
-        <div class="progress-bar-bg" style="margin-bottom:1.5rem;">
-          <div class="progress-bar-fill" style="width:${(currentQ / data.questions.length) * 100}%"></div>
-        </div>
-        <div class="quiz-question">${q.q}</div>
-        <div class="quiz-options" id="quizOptions-${moduleKey}">
-          ${q.options.map((opt, i) => `
-            <div class="quiz-option" data-idx="${i}" onclick="selectOption(this, '${moduleKey}', ${i}, ${q.answer}, \`${escapeTemplate(q.explain)}\`)">
-              <span class="quiz-option-letter">${letters[i]}</span>
-              <span>${opt}</span>
-            </div>
-          `).join('')}
-        </div>
-        <div id="quizFeedback-${moduleKey}" class="quiz-feedback" style="display:none;"></div>
-        <div class="quiz-actions" id="quizActions-${moduleKey}" style="margin-top:1.25rem;display:none;">
-          <button class="btn btn-primary btn-sm" onclick="nextQuestion_${moduleKey}()">
-            ${currentQ < data.questions.length - 1 ? 'Next Question →' : 'See Results →'}
-          </button>
-        </div>
-      </div>`;
+    // Build DOM elements instead of innerHTML with handlers to avoid XSS and inline onclick
+    container.innerHTML = '';
 
-    // Expose next-question function on window
-    window[`nextQuestion_${moduleKey}`] = () => {
-      currentQ++;
-      render();
-    };
+    const wrap = document.createElement('div');
+    wrap.className = 'quiz-container';
+
+    const header = document.createElement('div');
+    header.className = 'quiz-header';
+    header.innerHTML = `<span class="quiz-label">Quiz</span><span class="quiz-progress-text">Question ${currentQ + 1} of ${data.questions.length}</span>`;
+    wrap.appendChild(header);
+
+    const progressBg = document.createElement('div');
+    progressBg.className = 'progress-bar-bg';
+    progressBg.style.marginBottom = '1.5rem';
+    const progressFill = document.createElement('div');
+    progressFill.className = 'progress-bar-fill';
+    progressFill.style.width = `${(currentQ / data.questions.length) * 100}%`;
+    progressBg.appendChild(progressFill);
+    wrap.appendChild(progressBg);
+
+    const qEl = document.createElement('div');
+    qEl.className = 'quiz-question';
+    qEl.textContent = q.q;
+    wrap.appendChild(qEl);
+
+    const optsEl = document.createElement('div');
+    optsEl.className = 'quiz-options';
+    optsEl.id = `quizOptions-${moduleKey}`;
+    q.options.forEach((opt, i) => {
+      const optEl = document.createElement('div');
+      optEl.className = 'quiz-option';
+      optEl.dataset.idx = i;
+      const letter = document.createElement('span');
+      letter.className = 'quiz-option-letter';
+      letter.textContent = letters[i];
+      const text = document.createElement('span');
+      text.textContent = opt;
+      optEl.appendChild(letter);
+      optEl.appendChild(text);
+      optEl.addEventListener('click', () => handleAnswer(optEl, i, q.answer, q.explain));
+      wrap.appendChild(optsEl);
+      optsEl.appendChild(optEl);
+    });
+
+    const feedbackEl = document.createElement('div');
+    feedbackEl.id = `quizFeedback-${moduleKey}`;
+    feedbackEl.className = 'quiz-feedback';
+    feedbackEl.style.display = 'none';
+    wrap.appendChild(feedbackEl);
+
+    const actionsEl = document.createElement('div');
+    actionsEl.className = 'quiz-actions';
+    actionsEl.id = `quizActions-${moduleKey}`;
+    actionsEl.style.marginTop = '1.25rem';
+    actionsEl.style.display = 'none';
+    const nextBtn = document.createElement('button');
+    nextBtn.className = 'btn btn-primary btn-sm';
+    nextBtn.textContent = currentQ < data.questions.length - 1 ? 'Next Question →' : 'See Results →';
+    nextBtn.addEventListener('click', () => { currentQ++; render(); });
+    actionsEl.appendChild(nextBtn);
+    wrap.appendChild(actionsEl);
+
+    container.appendChild(wrap);
   }
 
-  function showResult() {
-    const pct = Math.round((score / data.questions.length) * 100);
-    const passed = pct >= 67; // ~2/3 correct
-
-    container.innerHTML = `
-      <div class="quiz-container">
-        <div class="quiz-result show">
-          <div style="font-size:4rem;margin-bottom:0.75rem;">${passed ? '🎉' : '😅'}</div>
-          <h3 style="margin-bottom:0.5rem;">${passed ? 'Great job!' : 'Keep going!'}</h3>
-          <p style="color:var(--text-muted);margin-bottom:0.5rem;">
-            You scored <strong style="color:${passed ? 'var(--success)' : 'var(--danger)'}">
-            ${score}/${data.questions.length}</strong> (${pct}%)
-          </p>
-          <p style="font-size:0.9rem;color:var(--text-muted);">
-            ${passed ? 'Quiz passed! Continue to the next module.' : 'Score at least 2/3 to proceed. Review the lessons and try again!'}
-          </p>
-          ${!passed ? `<button class="btn btn-outline btn-sm" style="margin-top:1rem;" onclick="renderQuiz('${moduleKey}', '${containerId}', arguments.callee)">🔄 Retry Quiz</button>` : ''}
-        </div>
-      </div>`;
-
-    if (passed) {
-      const navId = `nav-${moduleKey}q`;
-      const navEl = document.getElementById(navId);
-      if (navEl) navEl.style.display = 'flex';
-      if (typeof onPass === 'function') onPass(pct);
-    }
-  }
-
-  window[`selectOption`] = function (el, mod, idx, correctIdx, explain) {
-    if (mod !== moduleKey) return;
+  function handleAnswer(el, idx, correctIdx, explain) {
     if (answered) return;
     answered = true;
 
-    const opts = document.querySelectorAll(`#quizOptions-${mod} .quiz-option`);
+    const opts = document.querySelectorAll(`#quizOptions-${moduleKey} .quiz-option`);
     opts.forEach(o => o.classList.add('disabled'));
 
     const isCorrect = idx === correctIdx;
@@ -261,17 +264,73 @@ function renderQuiz(moduleKey, containerId, onPass) {
       opts[correctIdx].classList.add('correct');
     }
 
-    const feedback = document.getElementById(`quizFeedback-${mod}`);
+    const feedback = document.getElementById(`quizFeedback-${moduleKey}`);
     feedback.style.display = 'block';
     feedback.className = `quiz-feedback ${isCorrect ? 'correct' : 'wrong'}`;
-    feedback.innerHTML = `${isCorrect ? '✅ Correct!' : '❌ Not quite.'} ${explain}`;
+    // Use textContent to avoid XSS; prepend icon separately
+    feedback.textContent = `${isCorrect ? '✅ Correct!' : '❌ Not quite.'} ${explain}`;
 
-    document.getElementById(`quizActions-${mod}`).style.display = 'flex';
-  };
+    document.getElementById(`quizActions-${moduleKey}`).style.display = 'flex';
+  }
+
+  function showResult() {
+    const pct = Math.round((score / data.questions.length) * 100);
+    const passed = pct >= 67; // ~2/3 correct
+
+    container.innerHTML = '';
+
+    const wrap = document.createElement('div');
+    wrap.className = 'quiz-container';
+
+    const resultDiv = document.createElement('div');
+    resultDiv.className = 'quiz-result show';
+
+    const emoji = document.createElement('div');
+    emoji.style.cssText = 'font-size:4rem;margin-bottom:0.75rem;';
+    emoji.textContent = passed ? '🎉' : '😅';
+    resultDiv.appendChild(emoji);
+
+    const heading = document.createElement('h3');
+    heading.style.marginBottom = '0.5rem';
+    heading.textContent = passed ? 'Great job!' : 'Keep going!';
+    resultDiv.appendChild(heading);
+
+    const scorePara = document.createElement('p');
+    scorePara.style.cssText = 'color:var(--text-muted);margin-bottom:0.5rem;';
+    scorePara.innerHTML = `You scored <strong style="color:${passed ? 'var(--success)' : 'var(--danger)'}">${score}/${data.questions.length}</strong> (${pct}%)`;
+    resultDiv.appendChild(scorePara);
+
+    const msgPara = document.createElement('p');
+    msgPara.style.cssText = 'font-size:0.9rem;color:var(--text-muted);';
+    msgPara.textContent = passed
+      ? 'Quiz passed! Continue to the next module.'
+      : 'Score at least 2/3 to proceed. Review the lessons and try again!';
+    resultDiv.appendChild(msgPara);
+
+    if (!passed) {
+      const retryBtn = document.createElement('button');
+      retryBtn.className = 'btn btn-outline btn-sm';
+      retryBtn.style.marginTop = '1rem';
+      retryBtn.textContent = '🔄 Retry Quiz';
+      retryBtn.addEventListener('click', () => {
+        currentQ = 0;
+        score = 0;
+        answered = false;
+        renderQuiz(moduleKey, containerId, onPass);
+      });
+      resultDiv.appendChild(retryBtn);
+    }
+
+    wrap.appendChild(resultDiv);
+    container.appendChild(wrap);
+
+    if (passed) {
+      const navId = `nav-${moduleKey}q`;
+      const navEl = document.getElementById(navId);
+      if (navEl) navEl.style.display = 'flex';
+      if (typeof onPass === 'function') onPass(pct);
+    }
+  }
 
   render();
-}
-
-function escapeTemplate(str) {
-  return str.replace(/`/g, '\\`').replace(/\$/g, '\\$');
 }

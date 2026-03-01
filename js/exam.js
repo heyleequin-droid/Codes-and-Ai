@@ -127,15 +127,25 @@ function renderExamQuestion() {
 
   const letters = ['A', 'B', 'C', 'D'];
   const optContainer = document.getElementById('examOptions');
-  optContainer.innerHTML = q.options.map((opt, i) => `
-    <div class="exam-option" data-idx="${i}" onclick="selectExamOption(this, ${i}, ${q.answer})">
-      <span style="width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,0.08);
-        display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:700;flex-shrink:0;">
-        ${letters[i]}
-      </span>
-      <span>${opt}</span>
-    </div>
-  `).join('');
+  optContainer.innerHTML = '';
+
+  q.options.forEach((opt, i) => {
+    const el = document.createElement('div');
+    el.className = 'exam-option';
+    el.dataset.idx = i;
+
+    const letter = document.createElement('span');
+    letter.style.cssText = 'width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:700;flex-shrink:0;';
+    letter.textContent = letters[i];
+
+    const text = document.createElement('span');
+    text.textContent = opt;
+
+    el.appendChild(letter);
+    el.appendChild(text);
+    el.addEventListener('click', () => selectExamOption(el, i, q.answer));
+    optContainer.appendChild(el);
+  });
 }
 
 function selectExamOption(el, idx, correctIdx) {
@@ -196,14 +206,27 @@ function showExamResults() {
   if (passed) {
     localStorage.setItem('byoa_exam_passed', 'true');
     localStorage.setItem('byoa_exam_score', pct);
-    document.getElementById('examResultActions').innerHTML = `
-      <a href="certificate.html" class="btn btn-accent btn-lg">🎓 Claim Your Certificate</a>
-    `;
+    const actionsEl = document.getElementById('examResultActions');
+    actionsEl.innerHTML = '';
+    const certLink = document.createElement('a');
+    certLink.href = 'certificate.html';
+    certLink.className = 'btn btn-accent btn-lg';
+    certLink.textContent = '🎓 Claim Your Certificate';
+    actionsEl.appendChild(certLink);
   } else {
-    document.getElementById('examResultActions').innerHTML = `
-      <button class="btn btn-outline btn-lg" onclick="retakeExam()" style="margin-right:1rem;">🔄 Retake Exam</button>
-      <a href="course.html" class="btn btn-primary btn-lg">📖 Review Course</a>
-    `;
+    const actionsEl = document.getElementById('examResultActions');
+    actionsEl.innerHTML = '';
+    const retryBtn = document.createElement('button');
+    retryBtn.className = 'btn btn-outline btn-lg';
+    retryBtn.style.marginRight = '1rem';
+    retryBtn.textContent = '🔄 Retake Exam';
+    retryBtn.addEventListener('click', retakeExam);
+    const reviewLink = document.createElement('a');
+    reviewLink.href = 'course.html';
+    reviewLink.className = 'btn btn-primary btn-lg';
+    reviewLink.textContent = '📖 Review Course';
+    actionsEl.appendChild(retryBtn);
+    actionsEl.appendChild(reviewLink);
   }
 }
 
@@ -215,3 +238,12 @@ function retakeExam() {
   document.getElementById('examQuestions').style.display = 'block';
   renderExamQuestion();
 }
+
+// ── Wire up static buttons via addEventListener ────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  const startBtn = document.querySelector('[data-action="startExam"]');
+  if (startBtn) startBtn.addEventListener('click', startExam);
+
+  const nextBtn = document.getElementById('examNextBtn');
+  if (nextBtn) nextBtn.addEventListener('click', examNext);
+});

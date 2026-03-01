@@ -164,7 +164,11 @@ function processPayment() {
     return;
   }
 
-  // Stripe payment flow
+  // Stripe payment flow.
+  // IMPORTANT: Raw card fields are only used for UI validation and are passed
+  // to simulateStripeCharge() — a local stub that never transmits card data.
+  // In production, replace simulateStripeCharge() with Stripe.js tokenization:
+  // stripe.createToken(cardElement) → send only the token to your backend.
   const cardNum = document.getElementById('cardNumber').value.replace(/\s/g, '');
   const expiry = document.getElementById('cardExpiry').value.trim();
   const cvc = document.getElementById('cardCvc').value.trim();
