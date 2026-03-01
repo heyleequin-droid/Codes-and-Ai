@@ -1,3 +1,7 @@
+---
+layout: home
+permalink: /
+---
 # Codes-and-Ai
 
 Online course: **Coding for Beginners & AI Prompting**
