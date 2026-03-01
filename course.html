@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Course Player — Be Your Own AI</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+<!-- ── LOCKED GATE (shown if no access) ── -->
+<div class="locked-overlay" id="lockedOverlay" style="display:none;">
+  <div class="lock-icon">🔒</div>
+  <h2>Course Access Required</h2>
+  <p>You need to enroll to access the course content. It's only $39 — or use your free-access code!</p>
+  <a href="index.html#pricing" class="btn btn-accent btn-lg">Enroll Now — $39</a>
+  <p style="margin-top:1rem;font-size:0.85rem;color:var(--text-dim)">Already enrolled? Make sure you're using the same browser.</p>
+</div>
+
+<!-- ── NAVBAR ── -->
+<nav class="navbar">
+  <a class="nav-logo" href="index.html">🤖 Be Your Own <span>AI</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li id="examNavLink" style="display:none;"><a href="exam.html">Final Exam</a></li>
+  </ul>
+  <div class="nav-cta" style="align-items:center;gap:1rem;">
+    <span id="progressLabel" style="font-size:0.85rem;color:var(--text-muted);"></span>
+  </div>
+</nav>
+
+<!-- ── COURSE LAYOUT ── -->
+<div class="course-layout" id="courseLayout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-title">Course Content</div>
+
+    <!-- Progress bar -->
+    <div style="margin-bottom:1.25rem;">
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" id="courseProgressBar" style="width:0%"></div>
+      </div>
+      <div style="font-size:0.78rem;color:var(--text-dim);" id="progressText">0% complete</div>
+    </div>
+
+    <!-- Module 1 -->
+    <div class="sidebar-module">
+      <div class="sidebar-module-title">Module 1 — Variables &amp; Data</div>
+      <div class="sidebar-lesson" data-lesson="m1l1" onclick="loadLesson('m1l1')">
+        <span class="check" id="chk-m1l1">○</span> What is a Variable?
+      </div>
+      <div class="sidebar-lesson" data-lesson="m1l2" onclick="loadLesson('m1l2')">
+        <span class="check" id="chk-m1l2">○</span> Data Types
+      </div>
+      <div class="sidebar-lesson" data-lesson="m1q" onclick="loadLesson('m1q')">
+        <span class="check" id="chk-m1q">○</span> 🎯 Module 1 Quiz
+      </div>
+    </div>
+
+    <!-- Module 2 -->
+    <div class="sidebar-module">
+      <div class="sidebar-module-title">Module 2 — Logic &amp; Control Flow</div>
+      <div class="sidebar-lesson" data-lesson="m2l1" onclick="loadLesson('m2l1')">
+        <span class="check" id="chk-m2l1">○</span> If/Else Statements
+      </div>
+      <div class="sidebar-lesson" data-lesson="m2l2" onclick="loadLesson('m2l2')">
+        <span class="check" id="chk-m2l2">○</span> Loops
+      </div>
+      <div class="sidebar-lesson" data-lesson="m2q" onclick="loadLesson('m2q')">
+        <span class="check" id="chk-m2q">○</span> 🎯 Module 2 Quiz
+      </div>
+    </div>
+
+    <!-- Module 3 -->
+    <div class="sidebar-module">
+      <div class="sidebar-module-title">Module 3 — Functions &amp; Clean Code</div>
+      <div class="sidebar-lesson" data-lesson="m3l1" onclick="loadLesson('m3l1')">
+        <span class="check" id="chk-m3l1">○</span> Functions
+      </div>
+      <div class="sidebar-lesson" data-lesson="m3q" onclick="loadLesson('m3q')">
+        <span class="check" id="chk-m3q">○</span> 🎯 Module 3 Quiz
+      </div>
+    </div>
+
+    <!-- Module 4 -->
+    <div class="sidebar-module">
+      <div class="sidebar-module-title">Module 4 — AI Prompting Basics</div>
+      <div class="sidebar-lesson" data-lesson="m4l1" onclick="loadLesson('m4l1')">
+        <span class="check" id="chk-m4l1">○</span> What Is a Prompt?
+      </div>
+      <div class="sidebar-lesson" data-lesson="m4l2" onclick="loadLesson('m4l2')">
+        <span class="check" id="chk-m4l2">○</span> The RTF Framework
+      </div>
+      <div class="sidebar-lesson" data-lesson="m4q" onclick="loadLesson('m4q')">
+        <span class="check" id="chk-m4q">○</span> 🎯 Module 4 Quiz
+      </div>
+    </div>
+
+    <!-- Module 5 -->
+    <div class="sidebar-module">
+      <div class="sidebar-module-title">Module 5 — Advanced Prompting</div>
+      <div class="sidebar-lesson" data-lesson="m5l1" onclick="loadLesson('m5l1')">
+        <span class="check" id="chk-m5l1">○</span> Chain-of-Thought
+      </div>
+      <div class="sidebar-lesson" data-lesson="m5l2" onclick="loadLesson('m5l2')">
+        <span class="check" id="chk-m5l2">○</span> Prompt Templates
+      </div>
+      <div class="sidebar-lesson" data-lesson="m5q" onclick="loadLesson('m5q')">
+        <span class="check" id="chk-m5q">○</span> 🎯 Module 5 Quiz
+      </div>
+    </div>
+
+    <div style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--border);">
+      <a href="exam.html" class="btn btn-accent btn-sm" style="width:100%;justify-content:center;" id="examBtn">
+        🏆 Take Final Exam
+      </a>
+    </div>
+  </aside>
+
+  <!-- LESSON CONTENT AREA -->
+  <main class="lesson-content" id="lessonContent">
+
+    <!-- ══ MODULE 1 — LESSON 1 ══ -->
+    <article class="lesson-panel" id="panel-m1l1">
+      <h1>What is a Variable?</h1>
+      <div class="lesson-meta"><span>📖 Lesson</span><span>Module 1</span><span>~5 min read</span></div>
+      <div class="lesson-body">
+        <p>A <strong>variable</strong> is like a labelled box where you store information in a program. Instead of writing the same value over and over, you give it a name and reuse it.</p>
+
+        <h3>Real-World Analogy</h3>
+        <p>Imagine your phone's contact list. The name "Mom" is a variable — it stores the actual phone number. Whenever you say "call Mom," your phone looks up the number stored under that name.</p>
+
+        <h3>Variables in Code</h3>
+        <p>Here's what creating a variable looks like in JavaScript (the language of the web):</p>
+        <pre><code>let userName = "Alex";
+let age = 28;
+let isMember = true;</code></pre>
+
+        <p>We created three variables:</p>
+        <ul>
+          <li><code>userName</code> holds the text <code>"Alex"</code></li>
+          <li><code>age</code> holds the number <code>28</code></li>
+          <li><code>isMember</code> holds <code>true</code> (a yes/no value)</li>
+        </ul>
+
+        <h3>Naming Rules</h3>
+        <ul>
+          <li>Use descriptive names: <code>customerAge</code>, not <code>x</code></li>
+          <li>No spaces — use camelCase: <code>firstName</code></li>
+          <li>Can't start with a number</li>
+          <li>Case-sensitive: <code>Name</code> ≠ <code>name</code></li>
+        </ul>
+
+        <div class="tip"><strong>💡 Pro Tip:</strong> Good variable names make code read like English. Future-you will be grateful!</div>
+
+        <h3>Updating a Variable</h3>
+        <pre><code>let score = 0;
+score = score + 10; // score is now 10
+score += 5;         // score is now 15</code></pre>
+
+        <p>Variables can change value — that's the whole point! The computer tracks the latest value for you.</p>
+      </div>
+      <div class="lesson-nav">
+        <span></span>
+        <button class="btn btn-primary" onclick="completeLesson('m1l1', 'm1l2')">Next Lesson →</button>
+      </div>
+    </article>
+
+    <!-- ══ MODULE 1 — LESSON 2 ══ -->
+    <article class="lesson-panel" id="panel-m1l2">
+      <h1>Data Types: Text, Numbers &amp; Booleans</h1>
+      <div class="lesson-meta"><span>📖 Lesson</span><span>Module 1</span><span>~6 min read</span></div>
+      <div class="lesson-body">
+        <p>Not all data is the same. A program needs to know <em>what kind</em> of data it's working with so it can do the right thing with it.</p>
+
+        <h3>The Three Core Types</h3>
+
+        <h3>1. Strings (Text)</h3>
+        <p>Anything wrapped in quotes is a string:</p>
+        <pre><code>let greeting = "Hello, world!";
+let city = 'New York';
+let sentence = `I am ${age} years old.`; // template literal</code></pre>
+        <div class="tip"><strong>🔤 Remember:</strong> Even numbers become text if you wrap them in quotes: <code>"42"</code> is text, not a number you can do math with!</div>
+
+        <h3>2. Numbers</h3>
+        <p>Numbers have no quotes and can be used in calculations:</p>
+        <pre><code>let price = 39;
+let tax = 0.08;
+let total = price * (1 + tax); // 42.12</code></pre>
+
+        <h3>3. Booleans (True/False)</h3>
+        <p>Booleans represent on/off, yes/no, true/false — exactly two possible values:</p>
+        <pre><code>let isLoggedIn = false;
+let hasPurchased = true;
+let isOver18 = age >= 18; // evaluates to true or false</code></pre>
+
+        <h3>Why Does Type Matter?</h3>
+        <p>Type determines what operations make sense:</p>
+        <pre><code>"10" + "5" === "105"  // string concatenation!
+10  + 5   === 15     // arithmetic addition</code></pre>
+        <p>This is one of the most common beginner bugs — mixing strings and numbers.</p>
+
+        <h3>Checking the Type</h3>
+        <pre><code>typeof "hello"  // "string"
+typeof 42       // "number"
+typeof true     // "boolean"</code></pre>
+
+        <div class="tip"><strong>💡 Pro Tip:</strong> When in doubt, use <code>typeof</code> to inspect what type a variable holds.</div>
+      </div>
+      <div class="lesson-nav">
+        <button class="btn btn-outline" onclick="loadLesson('m1l1')">← Previous</button>
+        <button class="btn btn-primary" onclick="completeLesson('m1l2', 'm1q')">Next: Quiz →</button>
+      </div>
+    </article>
+
+    <!-- ══ MODULE 1 — QUIZ ══ -->
+    <article class="lesson-panel" id="panel-m1q">
+      <h1>Module 1 Quiz</h1>
+      <div class="lesson-meta"><span>🎯 Quiz</span><span>Module 1</span><span>3 questions</span></div>
+      <p style="color:var(--text-muted);margin-bottom:1.5rem;">Test your knowledge of variables and data types. You need 2/3 to pass and unlock the next module!</p>
+      <div id="quiz-m1"></div>
+      <div class="lesson-nav" id="nav-m1q" style="display:none;">
+        <button class="btn btn-outline" onclick="loadLesson('m1l2')">← Back to Lessons</button>
+        <button class="btn btn-primary" onclick="completeLesson('m1q', 'm2l1')">Module 2 →</button>
+      </div>
+    </article>
+
+    <!-- ══ MODULE 2 — LESSON 1 ══ -->
+    <article class="lesson-panel" id="panel-m2l1">
+      <h1>If/Else: Making Decisions in Code</h1>
+      <div class="lesson-meta"><span>📖 Lesson</span><span>Module 2</span><span>~7 min read</span></div>
+      <div class="lesson-body">
+        <p>Programs need to make decisions. The <strong>if/else</strong> statement lets your code choose different paths based on conditions.</p>
+
+        <h3>The Basic Syntax</h3>
+        <pre><code>if (condition) {
+  // runs when condition is TRUE
+} else {
+  // runs when condition is FALSE
+}</code></pre>
+
+        <h3>Real Example</h3>
+        <pre><code>let temperature = 85;
+
+if (temperature > 80) {
+  console.log("It's hot! Wear light clothing.");
+} else {
+  console.log("Comfortable weather today.");
+}</code></pre>
+
+        <h3>Multiple Conditions: else if</h3>
+        <pre><code>let score = 75;
+
+if (score >= 90) {
+  console.log("Grade: A");
+} else if (score >= 80) {
+  console.log("Grade: B");
+} else if (score >= 70) {
+  console.log("Grade: C");
+} else {
+  console.log("Grade: F — keep studying!");
+}</code></pre>
+
+        <h3>Comparison Operators</h3>
+        <ul>
+          <li><code>===</code> equal to (strict)</li>
+          <li><code>!==</code> not equal to</li>
+          <li><code>&gt;</code> greater than</li>
+          <li><code>&lt;</code> less than</li>
+          <li><code>&gt;=</code> greater than or equal</li>
+          <li><code>&lt;=</code> less than or equal</li>
+        </ul>
+
+        <h3>Logical Operators</h3>
+        <pre><code>// AND — both must be true
+if (age >= 18 && hasID) { ... }
+
+// OR — at least one must be true
+if (isAdmin || isModerator) { ... }
+
+// NOT — flips the value
+if (!isLoggedIn) { ... }</code></pre>
+
+        <div class="tip"><strong>💡 Always use <code>===</code> (strict equality)</strong> instead of <code>==</code> in JavaScript — it avoids type coercion surprises.</div>
+      </div>
+      <div class="lesson-nav">
+        <button class="btn btn-outline" onclick="loadLesson('m1q')">← Module 1</button>
+        <button class="btn btn-primary" onclick="completeLesson('m2l1', 'm2l2')">Next Lesson →</button>
+      </div>
+    </article>
+
+    <!-- ══ MODULE 2 — LESSON 2 ══ -->
+    <article class="lesson-panel" id="panel-m2l2">
+      <h1>Loops: Repeating Tasks Automatically</h1>
+      <div class="lesson-meta"><span>📖 Lesson</span><span>Module 2</span><span>~7 min read</span></div>
+      <div class="lesson-body">
+        <p>Loops let you run the same block of code multiple times without copying and pasting. They're one of the most powerful tools in programming.</p>
+
+        <h3>The For Loop</h3>
+        <p>Use a <code>for</code> loop when you know how many times you want to repeat:</p>
+        <pre><code>for (let i = 0; i &lt; 5; i++) {
+  console.log("Iteration number: " + i);
+}
+// Prints: 0, 1, 2, 3, 4</code></pre>
+
+        <p>The three parts of a for loop:</p>
+        <ol>
+          <li><code>let i = 0</code> — start value</li>
+          <li><code>i &lt; 5</code> — keep going while this is true</li>
+          <li><code>i++</code> — change the counter after each run</li>
+        </ol>
+
+        <h3>Looping Through Arrays</h3>
+        <pre><code>let fruits = ["apple", "banana", "cherry"];
+
+for (let i = 0; i &lt; fruits.length; i++) {
+  console.log(fruits[i]);
+}
+
+// Modern style using for...of:
+for (let fruit of fruits) {
+  console.log(fruit);
+}</code></pre>
+
+        <h3>The While Loop</h3>
+        <p>Use <code>while</code> when you don't know in advance how many iterations you need:</p>
+        <pre><code>let lives = 3;
+while (lives > 0) {
+  console.log("Lives remaining: " + lives);
+  lives--;
+}
+// Prints: 3, 2, 1</code></pre>
+
+        <div class="tip"><strong>⚠️ Infinite Loop Warning:</strong> Always make sure your loop condition will eventually become false — otherwise your program hangs!</div>
+
+        <h3>Practical Use Case</h3>
+        <pre><code>// Sum all numbers from 1 to 100
+let total = 0;
+for (let i = 1; i &lt;= 100; i++) {
+  total += i;
+}
+console.log(total); // 5050</code></pre>
+      </div>
+      <div class="lesson-nav">
+        <button class="btn btn-outline" onclick="loadLesson('m2l1')">← Previous</button>
+        <button class="btn btn-primary" onclick="completeLesson('m2l2', 'm2q')">Next: Quiz →</button>
+      </div>
+    </article>
+
+    <!-- ══ MODULE 2 — QUIZ ══ -->
+    <article class="lesson-panel" id="panel-m2q">
+      <h1>Module 2 Quiz</h1>
+      <div class="lesson-meta"><span>🎯 Quiz</span><span>Module 2</span><span>3 questions</span></div>
+      <p style="color:var(--text-muted);margin-bottom:1.5rem;">Test your knowledge of logic and loops!</p>
+      <div id="quiz-m2"></div>
+      <div class="lesson-nav" id="nav-m2q" style="display:none;">
+        <button class="btn btn-outline" onclick="loadLesson('m2l2')">← Back</button>
+        <button class="btn btn-primary" onclick="completeLesson('m2q', 'm3l1')">Module 3 →</button>
+      </div>
+    </article>
+
+    <!-- ══ MODULE 3 — LESSON 1 ══ -->
+    <article class="lesson-panel" id="panel-m3l1">
+      <h1>Functions: The Building Blocks of Programs</h1>
+      <div class="lesson-meta"><span>📖 Lesson</span><span>Module 3</span><span>~8 min read</span></div>
+      <div class="lesson-body">
+        <p>A <strong>function</strong> is a named, reusable block of code that performs a specific task. Functions are the single most important concept in all of programming.</p>
+
+        <h3>Defining and Calling a Function</h3>
+        <pre><code>// Define the function
+function greet(name) {
+  return "Hello, " + name + "!";
+}
+
+// Call (use) the function
+let message = greet("Alex");
+console.log(message); // "Hello, Alex!"</code></pre>
+
+        <h3>Why Functions Matter</h3>
+        <ul>
+          <li><strong>Reusability</strong> — Write once, use many times</li>
+          <li><strong>Readability</strong> — Code reads like sentences</li>
+          <li><strong>Maintainability</strong> — Fix a bug in one place</li>
+          <li><strong>Abstraction</strong> — Hide complexity behind a simple name</li>
+        </ul>
+
+        <h3>Parameters &amp; Return Values</h3>
+        <pre><code>function calculateTax(price, taxRate) {
+  let tax = price * taxRate;
+  return price + tax;
+}
+
+let total = calculateTax(39, 0.08); // 42.12</code></pre>
+
+        <h3>Arrow Functions (Modern Style)</h3>
+        <pre><code>// Traditional
+function add(a, b) { return a + b; }
+
+// Arrow function
+const add = (a, b) => a + b;
+
+// Usage is identical
+console.log(add(3, 4)); // 7</code></pre>
+
+        <div class="tip"><strong>💡 Single Responsibility Principle:</strong> Each function should do <em>one thing</em> and do it well. If your function needs a long name to describe it, split it up!</div>
+
+        <h3>Functions Calling Functions</h3>
+        <pre><code>function square(n) { return n * n; }
+function cube(n)   { return square(n) * n; }
+
+console.log(cube(3)); // 27</code></pre>
+      </div>
+      <div class="lesson-nav">
+        <button class="btn btn-outline" onclick="loadLesson('m2q')">← Module 2</button>
+        <button class="btn btn-primary" onclick="completeLesson('m3l1', 'm3q')">Next: Quiz →</button>
+      </div>
+    </article>
+
+    <!-- ══ MODULE 3 — QUIZ ══ -->
+    <article class="lesson-panel" id="panel-m3q">
+      <h1>Module 3 Quiz</h1>
+      <div class="lesson-meta"><span>🎯 Quiz</span><span>Module 3</span><span>3 questions</span></div>
+      <p style="color:var(--text-muted);margin-bottom:1.5rem;">Test your knowledge of functions!</p>
+      <div id="quiz-m3"></div>
+      <div class="lesson-nav" id="nav-m3q" style="display:none;">
+        <button class="btn btn-outline" onclick="loadLesson('m3l1')">← Back</button>
+        <button class="btn btn-primary" onclick="completeLesson('m3q', 'm4l1')">Module 4 →</button>
+      </div>
+    </article>
+
+    <!-- ══ MODULE 4 — LESSON 1 ══ -->
+    <article class="lesson-panel" id="panel-m4l1">
+      <h1>What Is a Prompt and How AI Reads It</h1>
+      <div class="lesson-meta"><span>📖 Lesson</span><span>Module 4</span><span>~7 min read</span></div>
+      <div class="lesson-body">
+        <p>A <strong>prompt</strong> is the message you give to an AI model. It's the steering wheel — the quality of your prompt determines the quality of the response.</p>
+
+        <h3>How AI Processes Your Prompt</h3>
+        <p>Modern AI models like ChatGPT and Claude are trained to predict the most useful response to your input. They look for:</p>
+        <ul>
+          <li><strong>Context</strong> — What situation is this in?</li>
+          <li><strong>Intent</strong> — What does the user actually want?</li>
+          <li><strong>Format cues</strong> — Should the answer be a list, code, essay?</li>
+          <li><strong>Constraints</strong> — Any rules or boundaries to follow?</li>
+        </ul>
+
+        <h3>The Difference a Prompt Makes</h3>
+        <div class="tip">
+          <strong>❌ Weak Prompt:</strong> "Write about marketing"<br/><br/>
+          <strong>✅ Strong Prompt:</strong> "Write a 200-word LinkedIn post for a solopreneur launching their first online course. Tone: energetic and confident. Include a call-to-action."
+        </div>
+
+        <p>Same AI, completely different output. The second prompt gives the AI:</p>
+        <ul>
+          <li>A specific platform (LinkedIn)</li>
+          <li>An audience (solopreneur)</li>
+          <li>A length target (200 words)</li>
+          <li>Tone guidance</li>
+          <li>A specific element to include</li>
+        </ul>
+
+        <h3>The 5 Elements of a Great Prompt</h3>
+        <ol>
+          <li><strong>Role</strong> — Who should the AI be?</li>
+          <li><strong>Task</strong> — What exactly should it do?</li>
+          <li><strong>Context</strong> — What's the background?</li>
+          <li><strong>Format</strong> — How should it respond?</li>
+          <li><strong>Constraints</strong> — What to avoid or limit?</li>
+        </ol>
+
+        <div class="tip"><strong>💡 Key Insight:</strong> AI doesn't read your mind. Every assumption it has to make is a chance for the output to miss the mark.</div>
+      </div>
+      <div class="lesson-nav">
+        <button class="btn btn-outline" onclick="loadLesson('m3q')">← Module 3</button>
+        <button class="btn btn-primary" onclick="completeLesson('m4l1', 'm4l2')">Next Lesson →</button>
+      </div>
+    </article>
+
+    <!-- ══ MODULE 4 — LESSON 2 ══ -->
+    <article class="lesson-panel" id="panel-m4l2">
+      <h1>The ROLE-TASK-FORMAT Framework</h1>
+      <div class="lesson-meta"><span>📖 Lesson</span><span>Module 4</span><span>~8 min read</span></div>
+      <div class="lesson-body">
+        <p>The <strong>RTF Framework</strong> (Role, Task, Format) is the simplest, most powerful prompt structure you'll ever learn. Apply it and your AI outputs will improve immediately.</p>
+
+        <h3>The Template</h3>
+        <pre><code>You are a [ROLE].
+[TASK — describe what you want].
+Format the response as [FORMAT].</code></pre>
+
+        <h3>Example 1 — Email Writing</h3>
+        <pre><code>You are a professional business email writer.
+Write a polite follow-up email to a client who hasn't responded
+in 5 days. Keep it brief and friendly, not pushy.
+Format: 3 short paragraphs, no more than 100 words total.</code></pre>
+
+        <h3>Example 2 — Code Help</h3>
+        <pre><code>You are a senior JavaScript developer.
+Explain how closures work to a complete beginner.
+Use a simple, real-world analogy and one short code example.
+Format: plain English explanation followed by a code block.</code></pre>
+
+        <h3>Example 3 — Content Creation</h3>
+        <pre><code>You are a viral social media copywriter who specializes in
+short-form video scripts.
+Create a 30-second TikTok script for a course called
+"Be Your Own AI" targeting beginners aged 18-35.
+Format: Line-by-line script with timestamps.</code></pre>
+
+        <h3>Why Roles Work</h3>
+        <p>Assigning a role "primes" the AI to access the appropriate knowledge domain and communication style. A "financial advisor" persona responds very differently from a "startup founder" persona — even to the same question.</p>
+
+        <h3>Iterating on Prompts</h3>
+        <p>Great prompting is a <em>dialogue</em>, not a one-shot command:</p>
+        <ol>
+          <li>Send your initial RTF prompt</li>
+          <li>Evaluate the response</li>
+          <li>Refine: "Make it shorter" / "More formal" / "Add examples"</li>
+          <li>Repeat until perfect</li>
+        </ol>
+
+        <div class="tip"><strong>🔑 The Golden Rule:</strong> If you'd have to explain it to a new employee, you need to put it in the prompt.</div>
+      </div>
+      <div class="lesson-nav">
+        <button class="btn btn-outline" onclick="loadLesson('m4l1')">← Previous</button>
+        <button class="btn btn-primary" onclick="completeLesson('m4l2', 'm4q')">Next: Quiz →</button>
+      </div>
+    </article>
+
+    <!-- ══ MODULE 4 — QUIZ ══ -->
+    <article class="lesson-panel" id="panel-m4q">
+      <h1>Module 4 Quiz</h1>
+      <div class="lesson-meta"><span>🎯 Quiz</span><span>Module 4</span><span>3 questions</span></div>
+      <p style="color:var(--text-muted);margin-bottom:1.5rem;">Test your knowledge of AI prompting basics!</p>
+      <div id="quiz-m4"></div>
+      <div class="lesson-nav" id="nav-m4q" style="display:none;">
+        <button class="btn btn-outline" onclick="loadLesson('m4l2')">← Back</button>
+        <button class="btn btn-primary" onclick="completeLesson('m4q', 'm5l1')">Module 5 →</button>
+      </div>
+    </article>
+
+    <!-- ══ MODULE 5 — LESSON 1 ══ -->
+    <article class="lesson-panel" id="panel-m5l1">
+      <h1>Chain-of-Thought Prompting</h1>
+      <div class="lesson-meta"><span>📖 Lesson</span><span>Module 5</span><span>~8 min read</span></div>
+      <div class="lesson-body">
+        <p><strong>Chain-of-Thought (CoT) prompting</strong> instructs the AI to reason step-by-step before giving its final answer. This dramatically improves accuracy for complex tasks.</p>
+
+        <h3>The Magic Phrase</h3>
+        <pre><code>"Think step by step."</code></pre>
+        <p>Adding those four words to a prompt triggers a fundamentally different mode of reasoning in the model.</p>
+
+        <h3>Why It Works</h3>
+        <p>AI models generate text one token at a time. By forcing intermediate reasoning steps into the output, the model "builds on" earlier thoughts — catching errors before committing to a final answer.</p>
+
+        <h3>Example — Math Problem</h3>
+        <div class="tip">
+          <strong>❌ Without CoT:</strong><br/>
+          Prompt: "A store has 15 items. It sells 40% and adds 8 more. How many?"<br/>
+          Bad answer: 17 (wrong reasoning)
+          <br/><br/>
+          <strong>✅ With CoT:</strong><br/>
+          Prompt: "A store has 15 items. It sells 40% and adds 8 more. How many? Think step by step."<br/>
+          Step 1: 40% of 15 = 6 items sold → 15 − 6 = 9 remaining<br/>
+          Step 2: 9 + 8 = 17. Answer: 17 ✓
+        </div>
+
+        <h3>CoT for Complex Tasks</h3>
+        <pre><code>You are a business strategist.
+I want to launch an online course for $39. Think step by step
+through the key risks, marketing channels, and first 30-day
+action plan. Be specific and actionable.</code></pre>
+
+        <h3>Zero-Shot vs. Few-Shot CoT</h3>
+        <ul>
+          <li><strong>Zero-Shot:</strong> Just add "Think step by step." — works for most problems.</li>
+          <li><strong>Few-Shot:</strong> Provide example question + reasoning + answer pairs before your actual question. More powerful for specialized domains.</li>
+        </ul>
+
+        <div class="tip"><strong>💡 Power Move:</strong> Combine RTF + CoT: "You are a [ROLE]. [TASK]. Think step by step, then present your final answer in [FORMAT]."</div>
+      </div>
+      <div class="lesson-nav">
+        <button class="btn btn-outline" onclick="loadLesson('m4q')">← Module 4</button>
+        <button class="btn btn-primary" onclick="completeLesson('m5l1', 'm5l2')">Next Lesson →</button>
+      </div>
+    </article>
+
+    <!-- ══ MODULE 5 — LESSON 2 ══ -->
+    <article class="lesson-panel" id="panel-m5l2">
+      <h1>Prompt Patterns &amp; Templates</h1>
+      <div class="lesson-meta"><span>📖 Lesson</span><span>Module 5</span><span>~8 min read</span></div>
+      <div class="lesson-body">
+        <p>Master prompting is about having a toolbox of proven patterns you can reach for instantly. Here are the most powerful ones.</p>
+
+        <h3>Pattern 1 — The Persona Pattern</h3>
+        <pre><code>Act as [persona] and [task].
+Example: "Act as a skeptical venture capitalist and critique
+my business idea. Be harsh but constructive."</code></pre>
+
+        <h3>Pattern 2 — The Flipped Interaction Pattern</h3>
+        <pre><code>I want you to ask ME questions to gather the information
+you need, then [task] based on my answers.
+Example: "Ask me 5 questions about my target audience,
+then write a product description."</code></pre>
+
+        <h3>Pattern 3 — The Template Fill Pattern</h3>
+        <pre><code>Fill in this template: [template with blanks].
+Example: "Fill in: The course [COURSE_NAME] helps [AUDIENCE]
+achieve [OUTCOME] in [TIMEFRAME] without [OBSTACLE]."</code></pre>
+
+        <h3>Pattern 4 — The Context Manager</h3>
+        <pre><code>Before we start, here is the context you must always remember:
+[background info]. Now, [task].
+
+This lets you "brief" the AI once and avoid repeating yourself
+in every follow-up message.</code></pre>
+
+        <h3>Pattern 5 — The Critic Pattern</h3>
+        <pre><code>Here is [your work]. Act as a [type of expert] and give me
+your 3 harshest criticisms and 3 specific improvements.
+Be direct, not polite.</code></pre>
+
+        <h3>Building Your Prompt Library</h3>
+        <p>The best prompters keep a personal library of their most effective prompts. After this course, start saving prompts that get great results in a simple document.</p>
+
+        <div class="tip">
+          <strong>🚀 The Ultimate Mega-Prompt Formula:</strong><br/><br/>
+          <code>You are [ROLE]. Your audience is [AUDIENCE]. [CONTEXT]. [TASK]. Think step by step. Format your response as [FORMAT]. Constraints: [CONSTRAINTS]. Start with [SPECIFIC OPENER].</code>
+        </div>
+
+        <p>When you apply all these layers together, AI becomes a true extension of your thinking — not just a search engine. <strong>That's what it means to Be Your Own AI.</strong></p>
+      </div>
+      <div class="lesson-nav">
+        <button class="btn btn-outline" onclick="loadLesson('m5l1')">← Previous</button>
+        <button class="btn btn-primary" onclick="completeLesson('m5l2', 'm5q')">Next: Quiz →</button>
+      </div>
+    </article>
+
+    <!-- ══ MODULE 5 — QUIZ ══ -->
+    <article class="lesson-panel" id="panel-m5q">
+      <h1>Module 5 Quiz</h1>
+      <div class="lesson-meta"><span>🎯 Quiz</span><span>Module 5</span><span>3 questions</span></div>
+      <p style="color:var(--text-muted);margin-bottom:1.5rem;">Final module quiz — then it's exam time!</p>
+      <div id="quiz-m5"></div>
+      <div class="lesson-nav" id="nav-m5q" style="display:none;">
+        <button class="btn btn-outline" onclick="loadLesson('m5l2')">← Back</button>
+        <a href="exam.html" class="btn btn-accent">🏆 Take Final Exam →</a>
+      </div>
+    </article>
+
+  </main>
+</div>
+
+<!-- ── VOICE BUTTON ── -->
+<button class="voice-btn" id="voiceBtn" onclick="speakCurrentLesson()" aria-label="Read lesson aloud">🔊</button>
+
+<script src="js/quiz.js"></script>
+<script src="js/course.js"></script>
+</body>
+</html>

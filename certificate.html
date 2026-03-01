@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Certificate of Completion — Be Your Own AI</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+<!-- LOCKED GATE -->
+<div class="locked-overlay" id="lockedOverlay" style="display:none;">
+  <div class="lock-icon">🏆</div>
+  <h2>Complete the Final Exam First</h2>
+  <p>Pass the final exam with 70% or higher to unlock your certificate of completion.</p>
+  <a href="exam.html" class="btn btn-accent btn-lg">Go to Final Exam</a>
+</div>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <a class="nav-logo" href="index.html">🤖 Be Your Own <span>AI</span></a>
+  <ul class="nav-links">
+    <li><a href="exam.html">← Exam</a></li>
+    <li><a href="course.html">Course</a></li>
+  </ul>
+</nav>
+
+<div style="padding-top:70px;" id="certBody">
+  <div class="cert-wrapper">
+    <div style="text-align:center;margin-bottom:2rem;">
+      <div style="font-size:3rem;margin-bottom:0.5rem;">🎓</div>
+      <h1 style="font-size:2.5rem;">Your Certificate</h1>
+      <p style="color:var(--text-muted);">You've earned it! Download or share your certificate of completion.</p>
+    </div>
+
+    <div class="cert-actions">
+      <button class="btn btn-accent btn-lg" onclick="downloadCertificate()">⬇ Download Certificate</button>
+      <button class="btn btn-outline" onclick="speakCongrats()">🔊 Hear Congratulations</button>
+      <a href="index.html" class="btn btn-outline">🏠 Back to Home</a>
+    </div>
+
+    <canvas id="certificateCanvas" width="1000" height="720"></canvas>
+  </div>
+</div>
+
+<script src="js/certificate.js"></script>
+</body>
+</html>

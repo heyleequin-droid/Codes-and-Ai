@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Final Exam — Be Your Own AI</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏆</text></svg>" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+<!-- LOCKED GATE -->
+<div class="locked-overlay" id="lockedOverlay" style="display:none;">
+  <div class="lock-icon">🔒</div>
+  <h2>Enroll to Access the Exam</h2>
+  <p>Complete the course first to unlock the final exam and earn your certificate.</p>
+  <a href="index.html#pricing" class="btn btn-accent btn-lg">Enroll Now — $39</a>
+</div>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <a class="nav-logo" href="index.html">🤖 Be Your Own <span>AI</span></a>
+  <ul class="nav-links">
+    <li><a href="course.html">← Back to Course</a></li>
+  </ul>
+</nav>
+
+<div style="padding-top:70px;" id="examBody">
+  <div class="exam-wrapper">
+
+    <!-- INTRO -->
+    <div id="examIntro" class="exam-header">
+      <div style="font-size:4rem;margin-bottom:1rem;">🏆</div>
+      <h1>Final Exam</h1>
+      <p style="color:var(--text-muted);margin:0.75rem 0 2rem;">
+        10 questions covering everything you've learned. Score 70% or higher to earn your
+        <strong style="color:var(--accent)">Certificate of Completion</strong>!
+      </p>
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;margin-bottom:2rem;text-align:left;">
+        <h3 style="margin-bottom:0.75rem;">Exam Rules</h3>
+        <ul style="color:var(--text-muted);font-size:0.95rem;display:flex;flex-direction:column;gap:0.5rem;list-style:none;">
+          <li>✔ 10 multiple-choice questions</li>
+          <li>✔ No time limit — take your time</li>
+          <li>✔ Passing score: 70% (7 out of 10)</li>
+          <li>✔ You may retake if you don't pass</li>
+          <li>✔ Earn a personalized certificate on passing</li>
+        </ul>
+      </div>
+      <button class="btn btn-accent btn-lg" onclick="startExam()">🚀 Start Final Exam</button>
+    </div>
+
+    <!-- EXAM QUESTIONS -->
+    <div id="examQuestions" style="display:none;">
+      <div class="exam-progress">
+        <div class="exam-question-num" id="examQNum">Question 1 of 10</div>
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill" id="examProgressBar" style="width:0%"></div>
+        </div>
+      </div>
+
+      <div class="exam-question" id="examQuestion"></div>
+      <div class="exam-options" id="examOptions"></div>
+      <div id="examFeedback" class="quiz-feedback" style="display:none;margin-bottom:1rem;"></div>
+
+      <div class="exam-nav">
+        <span id="examScoreTrack" style="font-size:0.875rem;color:var(--text-muted);"></span>
+        <button class="btn btn-primary" id="examNextBtn" onclick="examNext()" style="display:none;">
+          Next →
+        </button>
+      </div>
+    </div>
+
+    <!-- RESULTS -->
+    <div class="exam-results" id="examResults">
+      <div id="examResultIcon" style="font-size:5rem;margin-bottom:1rem;"></div>
+      <div class="exam-score-big" id="examScoreBig"></div>
+      <div style="font-size:1rem;color:var(--text-muted);margin:0.5rem 0;" id="examScoreLabel"></div>
+      <h2 style="margin:1rem 0 0.5rem;" id="examResultTitle"></h2>
+      <p style="color:var(--text-muted);max-width:480px;margin:0 auto 2rem;" id="examResultMsg"></p>
+      <div id="examResultActions"></div>
+    </div>
+
+  </div>
+</div>
+
+<script src="js/exam.js"></script>
+</body>
+</html>
